@@ -24,7 +24,8 @@ namespace TestGetFamilyLibrary
             Autodesk.Revit.ApplicationServices.Application app = uiapp.Application;
             Document doc = uidoc.Document;
 
-            string path = "C:\\ProgramData\\Autodesk\\RVT 2022\\Libraries\\English-Imperial\\Structural Columns\\Concrete\\Concrete-Rectangular-Column.rfa";
+            //string path = "C:\\ProgramData\\Autodesk\\RVT 2022\\Libraries\\English-Imperial\\Structural Columns\\Concrete\\Concrete-Rectangular-Column.rfa";
+            string path = "C:\\ProgramData\\Autodesk\\RVT 2022\\Libraries\\English-Imperial\\Doors\\Door-Double-Flush_Panel.rfa";
             using (Transaction tx = new Transaction(doc))
             {
                 try
@@ -37,19 +38,44 @@ namespace TestGetFamilyLibrary
 
                     Form_GetDataFamily form1 = new Form_GetDataFamily();
 
-                    form1.Path = path;
+                    FamilyParameterSet listFamilyParameter = familyManager.Parameters;
 
-                    //get reference
-                    //FamilyTypeSet familyTypes = familyManager.Types;
+                    form1.Path = path;
+                    form1.CountParameters = listFamilyParameter.Size;
+                    
+                    
+                    List<string> listIdFamily = new List<string>();
+                    List<string> listGroupFamily = new List<string>();
+                    List<string> listNameFamily = new List<string>();
+                    List<string> listTypeFamily = new List<string>();
+
+
+
+                    foreach (FamilyParameter itemPara in familyManager.Parameters)
+                    {
+                        string idParameter = itemPara.Id.ToString();
+                        string nameParameter = itemPara.Definition.Name.ToString();
+                        string groupParameter = itemPara.Definition.ParameterGroup.ToString();
+                        //string groupParameter = itemPara.s.ToString();
+                        string unitParameter = itemPara.Definition.ParameterType.ToString();
+
+
+                        listIdFamily.Add(idParameter);
+                        listNameFamily.Add(nameParameter);
+                        listGroupFamily.Add(groupParameter);
+                        listTypeFamily.Add(unitParameter);
+
+                        //allParameters = allParameters + itemPara.Definition.Name.ToString() + " // " + itemPara.Definition.ParameterGroup.ToString() + " // " + "\n";
+                    }
+                    
+                    form1.ListIdParaTable = listIdFamily;
+                    form1.ListNameParaTable = listNameFamily;
+                    form1.ListGroupParaTable = listGroupFamily;
+                    form1.ListTypeParaTable = listTypeFamily;
+                    
                     if (form1.ShowDialog() == DialogResult.OK)
                     {
-                        string allParameters = null;
-                        foreach (FamilyParameter itemPara in familyManager.Parameters)
-                        {
-                            allParameters = allParameters + itemPara.Definition.Name.ToString() + " // " + itemPara.Definition.ParameterGroup.ToString() + " // " + "\n";
-                        }
-                        TaskDialog.Show("message", allParameters);
-                        //TaskDialog.Show("message", form1.Path);
+                        TaskDialog.Show("message", listIdFamily.Count.ToString());
 
                     }
 
@@ -63,14 +89,14 @@ namespace TestGetFamilyLibrary
                     td.Title = "Error";
                     td.AllowCancellation = true;
 
-                    //Message related stuff
+                    
                     td.MainInstruction = "Error";
                     td.MainContent = "Error: " + e.Message;
 
-                    //Common button Stuffs
+                    
                     td.CommonButtons = TaskDialogCommonButtons.Close;
 
-                    //dialog showup stuffs
+                    
                     td.Show();
 
                     tx.RollBack();

@@ -16,7 +16,12 @@ namespace TestGetFamilyLibrary
     public partial class Form_GetDataFamily : System.Windows.Forms.Form
     {
         string path = "abc";
-
+        List<string> listIdFamily;
+        List<string> listNameFamily;
+        List<string> listGroupFamily;
+        int countParameters;
+        List<string> listIdParaTable;
+        List<string> listTypeParaTable;
         public string Path
         {
             get { return path; }
@@ -24,7 +29,35 @@ namespace TestGetFamilyLibrary
         }
         
 
+        public List<string> ListNameParaTable
+        {
+            get { return listNameFamily; }
+            set { listNameFamily = value; }
+        }
+
+        public List<string> ListGroupParaTable
+        {
+            get { return listGroupFamily; }
+            set { listGroupFamily = value; }
+        }
         
+        public int CountParameters
+        {
+            get { return countParameters; }
+            set { countParameters = value; }
+        }
+
+        public List<string> ListIdParaTable
+        {
+            get { return listIdParaTable; }
+            set { listIdParaTable = value; }
+        }
+
+        public List<string> ListTypeParaTable
+        {
+            get { return listTypeParaTable; }
+            set { listTypeParaTable = value; }
+        }
         public Form_GetDataFamily()
         {
             InitializeComponent();
@@ -45,11 +78,16 @@ namespace TestGetFamilyLibrary
 
         private void button1_Click(object sender, EventArgs e)
         {
-            for (int i = 0; i < 10; i++)
+            
+            //TaskDialog.Show("message", listIdParaTable[0]);
+            
+            for (int i = 0; i < countParameters; i++)
             {
-                ListViewItem item = new ListViewItem("s1" + i.ToString());
-                item.SubItems.Add("A" + i.ToString());
-                item.SubItems.Add("B" + i.ToString());
+                ListViewItem item = new ListViewItem(listIdParaTable[i]);
+                item.SubItems.Add(listNameFamily[i]);
+                item.SubItems.Add(listGroupFamily[i]);
+                item.SubItems.Add(listTypeParaTable[i]);
+
                 listView1.Items.Add(item);
             }
         }  
